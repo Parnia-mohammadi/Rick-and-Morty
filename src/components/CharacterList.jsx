@@ -1,6 +1,6 @@
 import { EyeIcon } from "@heroicons/react/24/outline";
 
-function CharacterList({ characters }) {
+function CharacterList({ characters, children }) {
   return (
     <div className="characters-list">
       {characters.map((item) => (
@@ -43,3 +43,5 @@ function CharacterInfo({ item }) {
     </div>
   );
 }
+
+

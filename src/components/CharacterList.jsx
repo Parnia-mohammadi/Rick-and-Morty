@@ -1,7 +1,15 @@
 import { EyeIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import Loader from "./Loader";
 
-function CharacterList({ characters, children }) {
+function CharacterList({ characters, children, isLoading }) {
+  if (isLoading)
+    return (
+      <div className="characters-list">
+        <Loader />
+      </div>
+    );
+
   return (
     <div className="characters-list">
       {characters.map((item) => (
@@ -50,7 +58,6 @@ function CharacterInfo({ item }) {
     </div>
   );
 }
-
 
 // render logic : => pure render logic !!!
 // do not perform network req.

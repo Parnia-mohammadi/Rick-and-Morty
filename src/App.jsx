@@ -4,7 +4,7 @@ import "./App.css";
 import CharacterDetail from "./components/CharacterDetail";
 import CharacterList from "./components/CharacterList";
 import Navbar, { SearchResult } from "./components/Navbar";
-import Loader from "./components/Loader";
+import { Toaster, toast } from "react-hot-toast";
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -12,23 +12,43 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      setIsLoading(true);
-      const res = await fetch("https://rickandmortyapi.com/api/characterss");
-      const data = await res.json();
-      setCharacters(data.results.slice(0, 5));
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const res = await fetch("https://rickandmortyapi.com/api/characters");
+
+        if (!res.ok) throw new Error("Something went wrong!");
+
+        const data = await res.json();
+        setCharacters(data.results.slice(0, 5));
+        // setIsLoading(false);
+      } catch (err) {
+        // FOR REAL PROJECT: err.response.data.message
+        // setIsLoading(false);
+        console.log(err.message);
+        toast.error(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchData();
   }, []);
 
   // useEffect(() => {
-  // setIsLoading(true);
+  //   setIsLoading(true);
   //   fetch("https://rickandmortyapi.com/api/character")
-  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       if (!res.ok) throw new Error("Something went wrong!!");
+  //       return res.json();
+  //     })
   //     .then((data) => {
-  //    setCharacters(data.results.slice(0, 5))
-  //   setIsLoading(false)
-  // });
+  //       setCharacters(data.results.slice(0, 5));
+  //       // setIsLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       // setIsLoading(false);
+  //       toast.error(err.message);
+  //     })
+  //     .finally(() => setIsLoading(false));
   // }, []);
 
   // then catch => aync await. ???
@@ -37,6 +57,7 @@ function App() {
 
   return (
     <div className="app">
+      <Toaster />
       <Navbar>
         <SearchResult numOfResult={characters.length} />
       </Navbar>

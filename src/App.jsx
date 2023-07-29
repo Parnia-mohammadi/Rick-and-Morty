@@ -16,7 +16,7 @@ function App() {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          "https://rickandmortyapi.com/api/characters"
+          "https://rickandmortyapi.com/api/character"
         );
         setCharacters(data.results.slice(0, 5));
       } catch (err) {
@@ -28,6 +28,23 @@ function App() {
     }
     fetchData();
   }, []);
+
+  // dependency array : role ? => when to run effect function
+
+  // 1. useEffect(()=>{}) => on every renders
+  // 2. useEffect(()=>{},[]) => on mount
+  // 3. useEffect(()=>{
+  // if(state) ...
+  // },[state]) => dep. array changes => run effect function
+
+
+  // when this useEffect runs. ?!
+
+
+  // state => changes => re-render => browser paint
+  // state -> changes -> run effect function => setState !!! => re-render !!
+
+
 
   // useEffect(() => {
   //   setIsLoading(true);

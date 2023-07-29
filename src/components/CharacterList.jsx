@@ -1,4 +1,5 @@
 import { EyeIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 function CharacterList({ characters, children }) {
   return (
@@ -13,12 +14,18 @@ function CharacterList({ characters, children }) {
 export default CharacterList;
 
 function Character({ item }) {
+  const [open, setOpen] = useState(false);
+
+  const handleCharacter = () => {
+    setOpen(!open);
+  };
+
   return (
     <div className="list__item">
       <img src={item.image} alt={item.name} />
       <CharaterName item={item} />
       <CharacterInfo item={item} />
-      <button className="icon red">
+      <button className="icon red" onClick={handleCharacter}>
         <EyeIcon />
       </button>
     </div>
@@ -45,3 +52,8 @@ function CharacterInfo({ item }) {
 }
 
 
+// render logic : => pure render logic !!!
+// do not perform network req.
+// do not create time
+// do not access DOM API ...
+// do not mutate object, state, props !

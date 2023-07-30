@@ -173,6 +173,10 @@
   gap: 1rem;
 }
 
+.character-detail__info .actions p {
+  color: var(--slate-400);
+}
+
 /* character episodes */
 
 .character-episodes {

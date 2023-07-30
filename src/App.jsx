@@ -1,92 +1,47 @@
 import { useEffect, useState } from "react";
-import { allCharacters } from "../data/data";
 import "./App.css";
 import CharacterDetail from "./components/CharacterDetail";
 import CharacterList from "./components/CharacterList";
-import Navbar, { SearchResult } from "./components/Navbar";
+import Navbar, { Search, SearchResult } from "./components/Navbar";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          "https://rickandmortyapi.com/api/character"
+          `https://rickandmortyapi.com/api/character/?name=${query}`
         );
         setCharacters(data.results.slice(0, 5));
       } catch (err) {
-        console.log(err.response.data.error);
+        setCharacters([]);
         toast.error(err.response.data.error);
       } finally {
         setIsLoading(false);
       }
     }
+
+    if (query.length < 3) {
+      setCharacters([]);
+      return;
+    }
+
     fetchData();
-  }, []);
+  }, [query]);
 
-  // dependency array : role ? => when to run effect function
-
-  // 1. useEffect(()=>{}) => on every renders
-  // 2. useEffect(()=>{},[]) => on mount
-  // 3. useEffect(()=>{
-  // if(state) ...
-  // },[state]) => dep. array changes => run effect function
-
-
-  // when this useEffect runs. ?!
-
-
-  // state => changes => re-render => browser paint
-  // state -> changes -> run effect function => setState !!! => re-render !!
-
-
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   fetch("https://rickandmortyapi.com/api/character")
-  //     .then((res) => {
-  //       if (!res.ok) throw new Error("Something went wrong!!");
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       setCharacters(data.results.slice(0, 5));
-  //       // setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       // setIsLoading(false);
-  //       toast.error(err.message);
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // }, []);
-
-  // then catch => aync await. ???
-  // async function test(){}
-  // async ()=>{}
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   axios
-  //     .get("https://rickandmortyapi.com/api/characters")
-  //     .then(({ data }) => {
-  //       setCharacters(data.results.slice(0, 5));
-  //       // setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       // setIsLoading(false);
-  //       toast.error(err.response.data.error);
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // }, []);
+  console.log("REDERING COMPONENT");
 
   return (
     <div className="app">
       <Toaster />
       <Navbar>
+        <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
       </Navbar>
       <Main>

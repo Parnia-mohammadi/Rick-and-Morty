@@ -1,5 +1,5 @@
 function Loader() {
-  return <p>Loading Data...</p>;
+  return <p style={{ color: "var(--slate-300)" }}>Loading Data...</p>;
 }
 
 export default Loader;

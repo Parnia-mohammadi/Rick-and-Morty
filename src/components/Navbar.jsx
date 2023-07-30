@@ -4,7 +4,6 @@ export default function Navbar({ children }) {
   return (
     <nav className="navbar">
       <Logo />
-      <Search />
       {children}
       <Favourites />
     </nav>
@@ -15,8 +14,16 @@ function Logo() {
   return <div className="navbar__logo">LOGO 😍</div>;
 }
 
-function Search() {
-  return <input type="text" className="text-field" placeholder="search..." />;
+export function Search({ query, setQuery }) {
+  return (
+    <input
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      type="text"
+      className="text-field"
+      placeholder="search..."
+    />
+  );
 }
 
 export function SearchResult({ numOfResult }) {

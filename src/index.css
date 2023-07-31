@@ -81,7 +81,7 @@ button {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--slate-700);
+  background-color: var(--slate-900);
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 1px 1px 50px var(--slate-600);
@@ -120,5 +120,5 @@ button {
   height: 100vh;
   position: fixed;
   inset: 0;
-  background-color: rgba(63, 69, 76, 0.7);
+  background-color: rgba(63, 69, 76, 0.8);
 }

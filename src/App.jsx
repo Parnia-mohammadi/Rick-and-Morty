@@ -5,14 +5,15 @@ import CharacterList from "./components/CharacterList";
 import Navbar, { Favourites, Search, SearchResult } from "./components/Navbar";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
-import Modal from "./components/Modal";
 
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [favourites, setFavourites] = useState([]);
+  const [favourites, setFavourites] = useState(
+    () => JSON.parse(localStorage.getItem("FAVOURITES")) || []
+  );
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -59,16 +60,11 @@ function App() {
     };
   }, [count]);
 
-  // clean up function
-  // what ?
-  // why to use ?
-  // when run ?
-  // 1. unmount component ,
-  //  2. befor the next re-render (between re-renders)
-  // where to use ?
-  // effect => after unmount or while re-rendering
-  // example :
-  // fetch API ,  timer, eventListener ,...
+  useEffect(() => {
+    localStorage.setItem("FAVOURITES", JSON.stringify(favourites));
+  }, [favourites]);
+
+  // console.log(JSON.parse(localStorage.getItem("FAVOURITES")));
 
   const handleSelectCharacter = (id) => {
     setSelectedId((prevId) => (prevId === id ? null : id));
@@ -83,14 +79,10 @@ function App() {
   };
 
   const isAddToFavourite = favourites.map((fav) => fav.id).includes(selectedId);
-  // [1,2,3]
 
   return (
     <div className="app">
-      {/* <div style={{ color: "#fff" }}>{count}</div> */}
       <Toaster />
-      {/* <Modal title="modal test" open={} onOpen={}>
-      </Modal> */}
       <Navbar>
         <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />

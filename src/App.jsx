@@ -5,6 +5,7 @@ import CharacterList from "./components/CharacterList";
 import Navbar, { Favourites, Search, SearchResult } from "./components/Navbar";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
+import Modal from "./components/Modal";
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -77,17 +78,26 @@ function App() {
     setFavourites((preFav) => [...preFav, char]);
   };
 
+  const handleDeleteFavourite = (id) => {
+    setFavourites((preFav) => preFav.filter((fav) => fav.id !== id));
+  };
+
   const isAddToFavourite = favourites.map((fav) => fav.id).includes(selectedId);
   // [1,2,3]
 
   return (
     <div className="app">
-      <div style={{ color: "#fff" }}>{count}</div>
+      {/* <div style={{ color: "#fff" }}>{count}</div> */}
       <Toaster />
+      {/* <Modal title="modal test" open={} onOpen={}>
+      </Modal> */}
       <Navbar>
         <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
-        <Favourites numOfFavourites={favourites.length} />
+        <Favourites
+          favourites={favourites}
+          onDeleteFavourite={handleDeleteFavourite}
+        />
       </Navbar>
       <Main>
         <CharacterList

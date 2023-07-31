@@ -12,6 +12,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [favourites, setFavourites] = useState([]);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -37,6 +38,26 @@ function App() {
     fetchData();
   }, [query]);
 
+  useEffect(() => {
+    const interval = setInterval(() => setCount((c) => c + 1), 1000);
+     
+    // return function(){}
+    return () => {
+      clearInterval(interval);
+    };
+  }, [count]);
+
+  // clean up function
+  // what ?
+  // why to use ?
+  // when run ?
+  // 1. unmount component ,
+  //  2. befor the next re-render (between re-renders)
+  // where to use ?
+  // effect => after unmount or while re-rendering
+  // example :
+  // fetch API ,  timer, eventListener ,...
+
   const handleSelectCharacter = (id) => {
     setSelectedId((prevId) => (prevId === id ? null : id));
   };
@@ -47,9 +68,10 @@ function App() {
 
   const isAddToFavourite = favourites.map((fav) => fav.id).includes(selectedId);
   // [1,2,3]
-  
+
   return (
     <div className="app">
+      <div style={{ color: "#fff" }}>{count}</div>
       <Toaster />
       <Navbar>
         <Search query={query} setQuery={setQuery} />

@@ -1,6 +1,17 @@
-
 import "./App.css";
+import NavBar from "./components/NavBar";
+import CharacterList from "./components/CharacterList";
+import CharacterDetail from "./components/CharacterDetail";
 
-function App(){
-  return <h1>03: Rick and Morty starter file</h1>
+function App() {
+  return (
+    <div className="App">
+      <NavBar />
+      <div className="main">
+        <CharacterList />
+        <CharacterDetail />
+      </div>
+    </div>
+  );
 }
+export default App;

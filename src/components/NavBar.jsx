@@ -1,5 +1,5 @@
 import { HeartIcon , SparklesIcon } from "@heroicons/react/24/outline";
-function NavBar() {
+function NavBar({characters}) {
   return (
     <nav className="navbar">
       <div className="navbar__logo"><span>Logo </span>
@@ -7,7 +7,7 @@ function NavBar() {
         }}/>
       </div>
       <input type="text" placeholder="search ..." className="text-field" />
-      <div className="navbar__result">Found x character</div>
+      <div className="navbar__result">Found {characters.length} character</div>
       <button className="heart">
         <HeartIcon className="icon"/>
         <span className="badge">4</span>

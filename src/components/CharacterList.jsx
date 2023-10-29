@@ -8,9 +8,9 @@ function CharacterList({ characters, isLoading }) {
   return (
     <div className="characters-list">
       {/* second way for using loading state */}
-      {isLoading ? <Loader/>:characters.map((item) => (
+      {isLoading ? <Loader/> : (characters.map((item) => (
         <Character key={item.id} item={item} />
-      ))}
+      )))}
     </div>
   );
 }

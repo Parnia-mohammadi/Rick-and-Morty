@@ -1,5 +1,5 @@
 import "./App.css";
-import NavBar from "./components/NavBar";
+import NavBar , {Search, SearchResult} from "./components/NavBar";
 import CharacterList from "./components/CharacterList";
 import CharacterDetail from "./components/CharacterDetail";
 import { allCharacters } from "../data/data";
@@ -11,6 +11,7 @@ import axios from "axios";
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [search, setSearch]=useState("");
   //first way for fetch data and adding loading state
   // useEffect(() => {
   //   setIsLoading(true);
@@ -52,8 +53,9 @@ function App() {
       // }
       //second way for handling error in axios for getting data from server
       try {
+        setIsLoading(true);
         const { data } = await axios.get(
-          "https://rickandmortyapi.com/api/character"
+          `https://rickandmortyapi.com/api/character?name=${search}`
         );
         // console.log(res.data.results);
         setCharacters(data.results.slice(0, 5));
@@ -65,20 +67,31 @@ function App() {
         setIsLoading(false);
       }
     }
+    if (search.length<3){
+      setCharacters([]);
+      return;
+    }
     fetchData();
-  }, []);
+  }, [search]);
   return (
     <div className="App">
       <Toaster />
-      <NavBar characters={characters} />
-      <div className="main">
+      <NavBar>
+        <Search search={search} setSearch={setSearch}/>
+        <SearchResult searchResult={characters.length} />
+      </NavBar>
+      <Main>
         {/* first way for using loading state */}
         <CharacterList characters={characters} isLoading={isLoading} />
         {/* second way for using loading state */}
         {/* {isLoading ? <Loader/>:<CharacterList characters={characters}/>} */}
         <CharacterDetail />
-      </div>
+      </Main>
     </div>
   );
 }
 export default App;
+
+export function Main({children}){
+  return <div className = "main">{children}</div>;
+}

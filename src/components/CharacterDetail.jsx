@@ -1,34 +1,35 @@
-import { character } from "../../data/data";
 import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
-import { episodes } from "../../data/data";
-function CharacterDetail() {
+// import { episodes } from "../../data/data";
+function CharacterDetail({ selectedCharacter }) {
   return (
     <div style={{ flex: 1 }}>
       <div className="character-detail">
         <img
           className="character-detail__img"
-          src={character.image}
-          alt={character.name}
+          src={selectedCharacter.image}
+          alt={selectedCharacter.name}
         />
         <div className="character-detail__info">
           <h3 className="name">
-            {character.gender == "Male" ? (
+            {selectedCharacter.gender == "Male" ? (
               <span>&#128102;</span>
             ) : (
               <span>&#x1F469;</span>
             )}
-            <span> {character.name}</span>
+            <span> {selectedCharacter.name}</span>
           </h3>
           <div className="info">
             <span
-              className={`status ${character.status == "Dead" ? "red" : ""}`}
+              className={`status ${
+                selectedCharacter.status == "Dead" ? "red" : ""
+              }`}
             ></span>
-            <span>&nbsp;{character.status}</span>
-            <span>&nbsp;- {character.species}</span>
+            <span>&nbsp;{selectedCharacter.status}</span>
+            <span>&nbsp;- {selectedCharacter.species}</span>
           </div>
           <div className="location">
             <p>Last known location</p>
-            <p>{character.location.name}</p>
+            <p>{selectedCharacter.location.name}</p>
           </div>
           <div className="actions">
             <button className="btn btn--primary">Add to Favourite</button>
@@ -41,7 +42,9 @@ function CharacterDetail() {
           <ArrowUpCircleIcon className="icon" />
         </div>
         <ul>
-          {episodes.map((item, index) => (
+          {/* first way using static data */}
+          {/* {
+          episodes.map((item, index) => (
             <li key={item.id}>
               <div>
                 {String(index + 1).padStart(2, "0")} - {item.episode} :
@@ -49,7 +52,9 @@ function CharacterDetail() {
               </div>
               <div className="badge badge--secondary">{item.air_date}</div>
             </li>
-          ))}
+          ))} */}
+          {/* second way using dynamic data */}
+          {/* {console.log(selectedCharacter.episode)} */}
         </ul>
       </div>
     </div>

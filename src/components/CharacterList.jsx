@@ -1,6 +1,6 @@
 import { EyeIcon } from "@heroicons/react/24/outline";
 import Loader from "./Loader";
-function CharacterList({ characters, isLoading }) {
+function CharacterList({ characters, isLoading,setSelectedId }) {
   // first way for using loading state
   // if (isLoading) return(
   //   <div className="characters-list"><Loader/></div>
@@ -9,7 +9,7 @@ function CharacterList({ characters, isLoading }) {
     <div className="characters-list">
       {/* second way for using loading state */}
       {isLoading ? <Loader/> : (characters.map((item) => (
-        <Character key={item.id} item={item} />
+        <Character key={item.id} item={item} setSelectedId ={setSelectedId} />
       )))}
     </div>
   );
@@ -17,7 +17,7 @@ function CharacterList({ characters, isLoading }) {
 
 export default CharacterList;
 
-function Character({ item }) {
+function Character({ item, setSelectedId }) {
   return (
     <div className="list__item">
       <img src={item.image} alt={item.name} />
@@ -34,7 +34,7 @@ function Character({ item }) {
         <span> {item.status}</span>
         <span> - {item.species}</span>
       </div>
-      <button className="icon red">
+      <button className="icon red" onClick={() => setSelectedId(item.id)}>
         <EyeIcon />
       </button>
     </div>

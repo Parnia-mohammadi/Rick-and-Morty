@@ -1,5 +1,5 @@
 import "./App.css";
-import NavBar , {Search, SearchResult} from "./components/NavBar";
+import NavBar, { Search, SearchResult } from "./components/NavBar";
 import CharacterList from "./components/CharacterList";
 import CharacterDetail from "./components/CharacterDetail";
 import { allCharacters } from "../data/data";
@@ -7,11 +7,14 @@ import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import { character } from "../data/data";
 
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [search, setSearch]=useState("");
+  const [search, setSearch] = useState("");
+  const [selectedId, setSelectedId] = useState(1);
+  const [selectedCharacter, setSelectedCharacter] = useState(character);
   //first way for fetch data and adding loading state
   // useEffect(() => {
   //   setIsLoading(true);
@@ -54,11 +57,20 @@ function App() {
       //second way for handling error in axios for getting data from server
       try {
         setIsLoading(true);
-        const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character?name=${search}`
-        );
-        // console.log(res.data.results);
-        setCharacters(data.results.slice(0, 5));
+        if (search != "" && search.length >= 3) {
+          const { data } = await axios.get(
+            `https://rickandmortyapi.com/api/character?name=${search}`
+          );
+          // console.log(res.data.results);
+          setCharacters(data.results);
+        }
+        if (search.length < 3) {
+          const { data } = await axios.get(
+            "https://rickandmortyapi.com/api/character"
+          );
+          // console.log(res.data.results);
+          setCharacters(data.results.slice(0, 5));
+        }
       } catch (err) {
         setCharacters([]);
         // console.log(err);
@@ -67,31 +79,49 @@ function App() {
         setIsLoading(false);
       }
     }
-    if (search.length<3){
-      setCharacters([]);
-      return;
-    }
+    // if (search.length < 3) {
+    //   setCharacters([]);
+    //   return;
+    // }
     fetchData();
   }, [search]);
+  useEffect(() => {
+    async function fetchCharacter() {
+      const { data } = await axios.get(
+        `https://rickandmortyapi.com/api/character/${selectedId}`
+      );
+      setSelectedCharacter(data);
+      const epis = await axios.get(selectedCharacter.episode);
+      console.log(epis.data.id);
+      // epis.map((e)=>(
+      //   console.log(e.id)
+      // ))
+    }
+    fetchCharacter();
+  }, [selectedId]);
   return (
     <div className="App">
       <Toaster />
       <NavBar>
-        <Search search={search} setSearch={setSearch}/>
+        <Search search={search} setSearch={setSearch} />
         <SearchResult searchResult={characters.length} />
       </NavBar>
       <Main>
         {/* first way for using loading state */}
-        <CharacterList characters={characters} isLoading={isLoading} />
+        <CharacterList
+          characters={characters}
+          isLoading={isLoading}
+          setSelectedId={setSelectedId}
+        />
         {/* second way for using loading state */}
         {/* {isLoading ? <Loader/>:<CharacterList characters={characters}/>} */}
-        <CharacterDetail />
+        <CharacterDetail selectedCharacter={selectedCharacter} />
       </Main>
     </div>
   );
 }
 export default App;
 
-export function Main({children}){
-  return <div className = "main">{children}</div>;
+export function Main({ children }) {
+  return <div className="main">{children}</div>;
 }

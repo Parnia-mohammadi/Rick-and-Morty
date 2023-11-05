@@ -1,6 +1,53 @@
 import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
 // import { episodes } from "../../data/data";
-function CharacterDetail({ selectedCharacter }) {
+import { useEffect, useState } from "react";
+// import { character } from "../../data/data"
+import Loader from "./Loader";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+function CharacterDetail({ selectedId }) {
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [episodes, setEpisodes] = useState([]);
+  //loading episodes
+  // const [episodes,setEpisodes] = useState(null);
+  useEffect(() => {
+    async function fetchCharacter() {
+      try {
+        setIsLoading(true);
+        const { data } = await axios.get(
+          `https://rickandmortyapi.com/api/character/${selectedId}`
+        );
+        setSelectedCharacter(data);
+        //first way for getting dynamic episodes(my way:))
+        // const epi = data.episode.map((e) => e.split("/").pop());
+        //second way 
+        const episodesId = data.episode.map((e) => e.split("/").at(-1));
+        const {data:episodeData} = await axios.get(
+          `https://rickandmortyapi.com/api/episode/${episodesId}`
+        );
+        // (epi.length==1)?(setEpisodes(epis)):(setEpisodes(epis.slice(0,5)))
+        //second way
+        // console.log([episodeData].flat().slice(0,6));
+        setEpisodes([episodeData].flat().slice(0,6));
+      } catch (err) {
+        toast.error(err.response.data.error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    if (selectedId) fetchCharacter();
+  }, [selectedId]);
+  if (!selectedId || !selectedCharacter) {
+    return <div style={{ flex: 1 }}>Please select a chararcter</div>;
+  }
+  if (isLoading) {
+    return (
+      <div style={{ flex: 1, color: "var(--slate-300)" }}>
+        <Loader />
+      </div>
+    );
+  }
   return (
     <div style={{ flex: 1 }}>
       <div className="character-detail">
@@ -43,18 +90,35 @@ function CharacterDetail({ selectedCharacter }) {
         </div>
         <ul>
           {/* first way using static data */}
-          {/* {
+          {/* {(Array.isArray(episodes))?(
           episodes.map((item, index) => (
-            <li key={item.id}>
+              <li key={item.id}>
+                <div>
+                  {String(index + 1).padStart(2, "0")} - {item.episode} :
+                  <strong> {item.name}</strong>
+                </div>
+                <div className="badge badge--secondary">{item.air_date}</div>
+              </li>
+            ))):
+            (
+              <li>
               <div>
-                {String(index + 1).padStart(2, "0")} - {item.episode} :
-                <strong> {item.name}</strong>
+                01 - {episodes.episode} :
+                <strong> {episodes.name}</strong>
               </div>
-              <div className="badge badge--secondary">{item.air_date}</div>
+              <div className="badge badge--secondary">{episodes.air_date}</div>
             </li>
-          ))} */}
-          {/* second way using dynamic data */}
-          {/* {console.log(selectedCharacter.episode)} */}
+            )
+            } */}
+          {/* second way */}
+          {episodes.map((item, index) => (
+              <li key={item.id}>
+                <div>
+                  {String(index + 1).padStart(2, "0")} - {item.episode} :
+                  <strong> {item.name}</strong>
+                </div>
+                <div className="badge badge--secondary">{item.air_date}</div>
+              </li>))}
         </ul>
       </div>
     </div>

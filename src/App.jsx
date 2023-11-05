@@ -7,14 +7,16 @@ import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import { character } from "../data/data";
 
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedId, setSelectedId] = useState(1);
-  const [selectedCharacter, setSelectedCharacter] = useState(character);
+  const [selectedId, setSelectedId] = useState(null);
+  const handleSelectedCharacter = (id) => {
+  setSelectedId((prevId)=>(prevId == id) ? null : id);
+    // setSelectedId(id);
+  };
   //first way for fetch data and adding loading state
   // useEffect(() => {
   //   setIsLoading(true);
@@ -85,20 +87,6 @@ function App() {
     // }
     fetchData();
   }, [search]);
-  useEffect(() => {
-    async function fetchCharacter() {
-      const { data } = await axios.get(
-        `https://rickandmortyapi.com/api/character/${selectedId}`
-      );
-      setSelectedCharacter(data);
-      const epis = await axios.get(selectedCharacter.episode);
-      console.log(epis.data.id);
-      // epis.map((e)=>(
-      //   console.log(e.id)
-      // ))
-    }
-    fetchCharacter();
-  }, [selectedId]);
   return (
     <div className="App">
       <Toaster />
@@ -111,11 +99,12 @@ function App() {
         <CharacterList
           characters={characters}
           isLoading={isLoading}
-          setSelectedId={setSelectedId}
+          handleSelectedCharacter={handleSelectedCharacter}
+          selectedId={selectedId}
         />
         {/* second way for using loading state */}
         {/* {isLoading ? <Loader/>:<CharacterList characters={characters}/>} */}
-        <CharacterDetail selectedCharacter={selectedCharacter} />
+        <CharacterDetail selectedId={selectedId} />
       </Main>
     </div>
   );

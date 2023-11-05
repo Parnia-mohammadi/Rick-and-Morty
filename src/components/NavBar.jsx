@@ -4,7 +4,6 @@ function NavBar({children}) {
     <nav className="navbar">
       <NavbarLogo/>
       {children}
-      <Faivorites/>
     </nav>
   );
 }
@@ -20,11 +19,11 @@ function NavbarLogo(){
   );
 }
 
-function Faivorites(){
+export function Faivorites({favourite}){
   return(
     <button className="heart">
       <HeartIcon className="icon"/>
-      <span className="badge">4</span>
+      <span className="badge">{favourite.length}</span>
     </button>
   );
 }

@@ -1,8 +1,8 @@
 import "./App.css";
-import NavBar, { Search, SearchResult } from "./components/NavBar";
+import NavBar, { Search, SearchResult, Faivorites } from "./components/NavBar";
 import CharacterList from "./components/CharacterList";
 import CharacterDetail from "./components/CharacterDetail";
-import { allCharacters } from "../data/data";
+// import { allCharacters } from "../data/data";
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,10 +13,26 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [favourite, setFavourite] = useState([]);
   const handleSelectedCharacter = (id) => {
   setSelectedId((prevId)=>(prevId == id) ? null : id);
     // setSelectedId(id);
   };
+  //first way for handle favourite
+  // const handleFavourite =(ch)=>{
+  //   setFavourite((prevFavourite)=>{
+  //     const uniqFavourites =prevFavourite.map((e)=>e.id== ch.id);
+  //     // console.log(uniqFavourites);
+  //     return(
+  //     (uniqFavourites.includes(true))?([...prevFavourite]):([...prevFavourite, ch])
+  //     )
+  //   });
+  // }
+  //second way for handle favourite
+  const handleFavourite =(char) =>{
+    setFavourite((prevFav)=>[...prevFav,char]);
+  }
+  const isAddedToFavourite= favourite.map((Fav)=>Fav.id).includes(selectedId);
   //first way for fetch data and adding loading state
   // useEffect(() => {
   //   setIsLoading(true);
@@ -87,12 +103,14 @@ function App() {
     // }
     fetchData();
   }, [search]);
+  // console.log(favourite);
   return (
     <div className="App">
       <Toaster />
       <NavBar>
         <Search search={search} setSearch={setSearch} />
         <SearchResult searchResult={characters.length} />
+        <Faivorites favourite={favourite}/>
       </NavBar>
       <Main>
         {/* first way for using loading state */}
@@ -104,7 +122,7 @@ function App() {
         />
         {/* second way for using loading state */}
         {/* {isLoading ? <Loader/>:<CharacterList characters={characters}/>} */}
-        <CharacterDetail selectedId={selectedId} />
+        <CharacterDetail selectedId={selectedId} handleFavourite={handleFavourite} isAddedToFavourite={isAddedToFavourite}/>
       </Main>
     </div>
   );

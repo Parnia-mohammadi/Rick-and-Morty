@@ -50,89 +50,127 @@ function CharacterDetail({ selectedId, handleFavourite, isAddedToFavourite }) {
   }
   return (
     <div style={{ flex: 1 }}>
-      <div className="character-detail">
-        <img
-          className="character-detail__img"
-          src={selectedCharacter.image}
-          alt={selectedCharacter.name}
-        />
-        <div className="character-detail__info">
-          <h3 className="name">
-            {selectedCharacter.gender == "Male" ? (
-              <span>&#128102;</span>
-            ) : (
-              <span>&#x1F469;</span>
-            )}
-            <span> {selectedCharacter.name}</span>
-          </h3>
-          <div className="info">
-            <span
-              className={`status ${
-                selectedCharacter.status == "Dead" ? "red" : ""
-              }`}
-            ></span>
-            <span>&nbsp;{selectedCharacter.status}</span>
-            <span>&nbsp;- {selectedCharacter.species}</span>
-          </div>
-          <div className="location">
-            <p>Last known location</p>
-            <p>{selectedCharacter.location.name}</p>
-          </div>
-          <div className="actions">
-            {isAddedToFavourite ? (
-              <p>Already adde to favourites.</p>
-            ) : (
-              <button
-                className="btn btn--primary"
-                onClick={() => handleFavourite(selectedCharacter)}
-              >
-                Add to Favourite
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="character-episodes">
-        <div className="title">
-          <h2 className="name">List of episodes:</h2>
-          <ArrowUpCircleIcon className="icon" />
-        </div>
-        <ul>
-          {/* first way using static data */}
-          {/* {(Array.isArray(episodes))?(
-          episodes.map((item, index) => (
-              <li key={item.id}>
-                <div>
-                  {String(index + 1).padStart(2, "0")} - {item.episode} :
-                  <strong> {item.name}</strong>
-                </div>
-                <div className="badge badge--secondary">{item.air_date}</div>
-              </li>
-            ))):
-            (
-              <li>
-              <div>
-                01 - {episodes.episode} :
-                <strong> {episodes.name}</strong>
-              </div>
-              <div className="badge badge--secondary">{episodes.air_date}</div>
-            </li>
-            )
-            } */}
-          {/* second way */}
-          {episodes.map((item, index) => (
-            <li key={item.id}>
-              <div>
-                {String(index + 1).padStart(2, "0")} - {item.episode} :
-                <strong> {item.name}</strong>
-              </div>
-              <div className="badge badge--secondary">{item.air_date}</div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <CharacterSubInfo
+        selectedCharacter={selectedCharacter}
+        isAddedToFavourite={isAddedToFavourite}
+        handleFavourite={handleFavourite}
+      />
+      <EpisodeList episodes={episodes} />
     </div>
   );
 }
 
 export default CharacterDetail;
+
+export function CharacterSubInfo({
+  selectedCharacter,
+  isAddedToFavourite,
+  handleFavourite,
+}) {
+  return (
+    <div className="character-detail">
+      <img
+        className="character-detail__img"
+        src={selectedCharacter.image}
+        alt={selectedCharacter.name}
+      />
+      <div className="character-detail__info">
+        <h3 className="name">
+          {selectedCharacter.gender == "Male" ? (
+            <span>&#128102;</span>
+          ) : (
+            <span>&#x1F469;</span>
+          )}
+          <span> {selectedCharacter.name}</span>
+        </h3>
+        <div className="info">
+          <span
+            className={`status ${
+              selectedCharacter.status == "Dead" ? "red" : ""
+            }`}
+          ></span>
+          <span>&nbsp;{selectedCharacter.status}</span>
+          <span>&nbsp;- {selectedCharacter.species}</span>
+        </div>
+        <div className="location">
+          <p>Last known location</p>
+          <p>{selectedCharacter.location.name}</p>
+        </div>
+        <div className="actions">
+          {isAddedToFavourite ? (
+            <p> * Already adde to favourites.</p>
+          ) : (
+            <button
+              className="btn btn--primary"
+              onClick={() => handleFavourite(selectedCharacter)}
+            >
+              Add to Favourite
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function EpisodeList({ episodes }) {
+  const [sortBy, setSortBy] = useState(true);
+  let sortedEpisodes;
+  if (sortBy) {
+    sortedEpisodes = [...episodes].sort((a, b) => (
+      new Date(a.air_date) - new Date(b.air_date)));
+  } else {
+    sortedEpisodes = [...episodes].sort((a, b) =>(
+      new Date(b.air_date) - new Date(a.air_date)));
+  }
+  return (
+    <div className="character-episodes">
+      <div className="title">
+        <h2 className="name">List of episodes:</h2>
+        <button
+          onClick={() => {
+            setSortBy((is) => !is);
+          }}
+        >
+          <ArrowUpCircleIcon
+            className="icon"
+            style={{ rotate: sortBy ? "0deg" : "180deg" }}
+          />
+        </button>
+      </div>
+      <ul>
+        {/* first way using static data */}
+        {/* {(Array.isArray(episodes))?(
+      episodes.map((item, index) => (
+          <li key={item.id}>
+            <div>
+              {String(index + 1).padStart(2, "0")} - {item.episode} :
+              <strong> {item.name}</strong>
+            </div>
+            <div className="badge badge--secondary">{item.air_date}</div>
+          </li>
+        ))):
+        (
+          <li>
+          <div>
+            01 - {episodes.episode} :
+            <strong> {episodes.name}</strong>
+          </div>
+          <div className="badge badge--secondary">{episodes.air_date}</div>
+        </li>
+        )
+        } */}
+        {/* second way */}
+        {sortedEpisodes.map((item, index) => (
+          <li key={item.id}>
+            <div>
+              {String(index + 1).padStart(2, "0")} - {item.episode} :
+              <strong> {item.name}</strong>
+            </div>
+            <div className="badge badge--secondary">{item.air_date}</div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

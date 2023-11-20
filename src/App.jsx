@@ -1,12 +1,14 @@
 import "./App.css";
 import NavBar, { Search, SearchResult, Faivorites } from "./components/NavBar";
-import CharacterList from "./components/CharacterList";
+import CharacterList, { Character } from "./components/CharacterList";
 import CharacterDetail from "./components/CharacterDetail";
 // import { allCharacters } from "../data/data";
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import Modal from "./components/Modal";
+import {TrashIcon} from "@heroicons/react/24/outline"
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -14,6 +16,7 @@ function App() {
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [favourite, setFavourite] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const handleSelectedCharacter = (id) => {
     setSelectedId((prevId) => (prevId == id ? null : id));
     // setSelectedId(id);
@@ -124,8 +127,16 @@ function App() {
       <NavBar>
         <Search search={search} setSearch={setSearch} />
         <SearchResult searchResult={characters.length} />
-        <Faivorites favourite={favourite} />
+        <Faivorites favourite={favourite} setIsOpen={setIsOpen}/>
       </NavBar>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+          {favourite.map((item)=>
+          <Character item={item} key={item.id}>
+            <TrashIcon className="icon red"/>
+          </Character>
+          )}
+
+      </Modal>
       <Main>
         {/* first way for using loading state */}
         <CharacterList

@@ -15,7 +15,7 @@ function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [favourite, setFavourite] = useState([]);
   const handleSelectedCharacter = (id) => {
-  setSelectedId((prevId)=>(prevId == id) ? null : id);
+    setSelectedId((prevId) => (prevId == id ? null : id));
     // setSelectedId(id);
   };
   //first way for handle favourite
@@ -29,10 +29,12 @@ function App() {
   //   });
   // }
   //second way for handle favourite
-  const handleFavourite =(char) =>{
-    setFavourite((prevFav)=>[...prevFav,char]);
-  }
-  const isAddedToFavourite= favourite.map((Fav)=>Fav.id).includes(selectedId);
+  const handleFavourite = (char) => {
+    setFavourite((prevFav) => [...prevFav, char]);
+  };
+  const isAddedToFavourite = favourite
+    .map((Fav) => Fav.id)
+    .includes(selectedId);
   //first way for fetch data and adding loading state
   // useEffect(() => {
   //   setIsLoading(true);
@@ -57,51 +59,63 @@ function App() {
   // }, []);
   //second way for fetch data
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function fetchData() {
       //first way for handling error with res.ok
-      // try{
-      //   //adding loading state
-      //   setIsLoading(true);
-      //   const res = await fetch("https://rickandmortyapi.com/api/character");
-
-      //   if (!res.ok) throw new Error("sth is wrong!");
-
-      //   const data = await res.json();
-      //   setCharacters(data.results.slice(0,5));
-      // }catch(err){
-      //   setCharacters([]);
-      //   toast.error(err.message);
-      // }
-      //second way for handling error in axios for getting data from server
       try {
+        //adding loading state
         setIsLoading(true);
-        if (search != "" && search.length >= 3) {
-          const { data } = await axios.get(
-            `https://rickandmortyapi.com/api/character?name=${search}`
-          );
-          // console.log(res.data.results);
-          setCharacters(data.results);
-        }
-        if (search.length < 3) {
-          const { data } = await axios.get(
-            "https://rickandmortyapi.com/api/character"
-          );
-          // console.log(res.data.results);
-          setCharacters(data.results.slice(0, 5));
-        }
+        const res = await fetch(
+          `https://rickandmortyapi.com/api/character?name=${search}`,
+          { signal }
+        );
+
+        if (!res.ok) throw new Error("sth is wrong!");
+
+        const data = await res.json();
+        setCharacters(data.results.slice(0, 5));
       } catch (err) {
-        setCharacters([]);
-        // console.log(err);
-        toast.error(err.response.data.error);
+        if (err.name != "AbortError") {
+          setCharacters([]);
+          toast.error(err.message);
+        }
       } finally {
         setIsLoading(false);
       }
+      //second way for handling error in axios for getting data from server
+      // try {
+      //   setIsLoading(true);
+      //   if (search != "" && search.length >= 3) {
+      //     const { data } = await axios.get(
+      //       `https://rickandmortyapi.com/api/character?name=${search}`,{signal}
+      //     );
+      //     // console.log(res.data.results);
+      //     setCharacters(data.results);
+      //   }
+      //   if (search.length < 3) {
+      //     const { data } = await axios.get(
+      //       "https://rickandmortyapi.com/api/character",{signal}
+      //     );
+      //     // console.log(res.data.results);
+      //     setCharacters(data.results.slice(0, 5));
+      //   }
+      // } catch (err) {
+      //   // if(!axios.isCancel()){
+      //   setCharacters([]);
+      //   toast.error(err.response.data.error);
+      // } finally {
+      //   setIsLoading(false);
+      // }
     }
     // if (search.length < 3) {
     //   setCharacters([]);
     //   return;
     // }
     fetchData();
+    return () => {
+      controller.abort();
+    };
   }, [search]);
   // console.log(favourite);
   return (
@@ -110,7 +124,7 @@ function App() {
       <NavBar>
         <Search search={search} setSearch={setSearch} />
         <SearchResult searchResult={characters.length} />
-        <Faivorites favourite={favourite}/>
+        <Faivorites favourite={favourite} />
       </NavBar>
       <Main>
         {/* first way for using loading state */}
@@ -122,7 +136,11 @@ function App() {
         />
         {/* second way for using loading state */}
         {/* {isLoading ? <Loader/>:<CharacterList characters={characters}/>} */}
-        <CharacterDetail selectedId={selectedId} handleFavourite={handleFavourite} isAddedToFavourite={isAddedToFavourite}/>
+        <CharacterDetail
+          selectedId={selectedId}
+          handleFavourite={handleFavourite}
+          isAddedToFavourite={isAddedToFavourite}
+        />
       </Main>
     </div>
   );

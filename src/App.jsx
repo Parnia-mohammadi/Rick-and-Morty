@@ -8,7 +8,7 @@ import Loader from "./components/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import Modal from "./components/Modal";
-import {TrashIcon} from "@heroicons/react/24/outline"
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -17,6 +17,10 @@ function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [favourite, setFavourite] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  //delete favorite episodes
+  const handleDelete = (id) => {
+    setFavourite((prevFavourites) => prevFavourites.filter((prevFavourite)=> id!= prevFavourite.id));
+  };
   const handleSelectedCharacter = (id) => {
     setSelectedId((prevId) => (prevId == id ? null : id));
     // setSelectedId(id);
@@ -127,15 +131,17 @@ function App() {
       <NavBar>
         <Search search={search} setSearch={setSearch} />
         <SearchResult searchResult={characters.length} />
-        <Faivorites favourite={favourite} setIsOpen={setIsOpen}/>
+        <Faivorites favourite={favourite} setIsOpen={setIsOpen} />
       </NavBar>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-          {favourite.map((item)=>
+        {favourite.map((item) => (
           <Character item={item} key={item.id}>
-            <TrashIcon className="icon red"/>
+            <TrashIcon
+              className="icon red"
+              onClick={() => handleDelete(item.id)}
+            />
           </Character>
-          )}
-
+        ))}
       </Modal>
       <Main>
         {/* first way for using loading state */}

@@ -15,16 +15,23 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [favourite, setFavourite] = useState([]);
+  const [favourite, setFavourite] = useState(
+    () => JSON.parse(localStorage.getItem("FAVORITES")) || []
+  );
   const [isOpen, setIsOpen] = useState(false);
   //delete favorite episodes
   const handleDelete = (id) => {
-    setFavourite((prevFavourites) => prevFavourites.filter((prevFavourite)=> id!= prevFavourite.id));
+    setFavourite((prevFavourites) =>
+      prevFavourites.filter((prevFavourite) => id != prevFavourite.id)
+    );
   };
   const handleSelectedCharacter = (id) => {
     setSelectedId((prevId) => (prevId == id ? null : id));
     // setSelectedId(id);
   };
+  useEffect(() => {
+    localStorage.setItem("FAVORITES", JSON.stringify(favourite));
+  }, [favourite]);
   //first way for handle favourite
   // const handleFavourite =(ch)=>{
   //   setFavourite((prevFavourite)=>{
@@ -125,6 +132,7 @@ function App() {
     };
   }, [search]);
   // console.log(favourite);
+
   return (
     <div className="App">
       <Toaster />

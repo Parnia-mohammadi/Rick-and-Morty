@@ -10,16 +10,15 @@ import axios from "axios";
 import Modal from "./components/Modal";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import useCharacters from "./hooks/useCharacters";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
   const [search, setSearch] = useState("");
   const { isLoading, characters } = useCharacters("https://rickandmortyapi.com/api/character?name",
     search
   );
+  const [favourite, setFavourite] = useLocalStorage("FAVORITES",[]);
   const [selectedId, setSelectedId] = useState(null);
-  const [favourite, setFavourite] = useState(
-    () => JSON.parse(localStorage.getItem("FAVORITES")) || []
-  );
   const [isOpen, setIsOpen] = useState(false);
   //delete favorite episodes
   const handleDelete = (id) => {
@@ -31,9 +30,6 @@ function App() {
     setSelectedId((prevId) => (prevId == id ? null : id));
     // setSelectedId(id);
   };
-  useEffect(() => {
-    localStorage.setItem("FAVORITES", JSON.stringify(favourite));
-  }, [favourite]);
   //first way for handle favourite
   // const handleFavourite =(ch)=>{
   //   setFavourite((prevFavourite)=>{

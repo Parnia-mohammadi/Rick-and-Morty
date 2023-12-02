@@ -7,7 +7,7 @@ export default function useCharacters(url, search ) {
   // useEffect(() => {
   //     setIsLoading(true);
   //     axios
-  //       .get("https://rickandmortyapi.com/api/character")
+  //       .get(`${url}=${search}`)
   //       .then(({ data }) =>{
   //         setCharacters(data.results.slice(0, 5));}).catch((err)=>{
   //     setCharacters([]);
@@ -44,7 +44,7 @@ export default function useCharacters(url, search ) {
       //   setIsLoading(true);
       //   if (search != "" && search.length >= 3) {
       //     const { data } = await axios.get(
-      //       `https://rickandmortyapi.com/api/character?name=${search}`,{signal}
+      //       `${url}=${search}`,{signal}
       //     );
       //     // console.log(res.data.results);
       //     setCharacters(data.results);

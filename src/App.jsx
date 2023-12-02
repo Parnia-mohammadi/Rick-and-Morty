@@ -9,11 +9,13 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import Modal from "./components/Modal";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import useCharacters from "./hooks/useCharacters";
 
 function App() {
-  const [characters, setCharacters] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const { isLoading, characters } = useCharacters("https://rickandmortyapi.com/api/character?name",
+    search
+  );
   const [selectedId, setSelectedId] = useState(null);
   const [favourite, setFavourite] = useState(
     () => JSON.parse(localStorage.getItem("FAVORITES")) || []
@@ -58,79 +60,6 @@ function App() {
   //     setIsLoading(false);
   //     });
   // }, []);
-  //first way for handling error in axios.then
-  // useEffect(() => {
-  //     setIsLoading(true);
-  //     axios
-  //       .get("https://rickandmortyapi.com/api/character")
-  //       .then(({ data }) =>{
-  //         setCharacters(data.results.slice(0, 5));}).catch((err)=>{
-  //     setCharacters([]);
-  //     toast.error(err.response.data.error);})
-  //   .finally(()=>{
-  //     setIsLoading(false);}
-  //   )
-  // }, []);
-  //second way for fetch data
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    async function fetchData() {
-      //first way for handling error with res.ok
-      try {
-        //adding loading state
-        setIsLoading(true);
-        const res = await fetch(
-          `https://rickandmortyapi.com/api/character?name=${search}`,
-          { signal }
-        );
-
-        if (!res.ok) throw new Error("sth is wrong!");
-
-        const data = await res.json();
-        setCharacters(data.results.slice(0, 5));
-      } catch (err) {
-        if (err.name != "AbortError") {
-          setCharacters([]);
-          toast.error(err.message);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-      //second way for handling error in axios for getting data from server
-      // try {
-      //   setIsLoading(true);
-      //   if (search != "" && search.length >= 3) {
-      //     const { data } = await axios.get(
-      //       `https://rickandmortyapi.com/api/character?name=${search}`,{signal}
-      //     );
-      //     // console.log(res.data.results);
-      //     setCharacters(data.results);
-      //   }
-      //   if (search.length < 3) {
-      //     const { data } = await axios.get(
-      //       "https://rickandmortyapi.com/api/character",{signal}
-      //     );
-      //     // console.log(res.data.results);
-      //     setCharacters(data.results.slice(0, 5));
-      //   }
-      // } catch (err) {
-      //   // if(!axios.isCancel()){
-      //   setCharacters([]);
-      //   toast.error(err.response.data.error);
-      // } finally {
-      //   setIsLoading(false);
-      // }
-    }
-    // if (search.length < 3) {
-    //   setCharacters([]);
-    //   return;
-    // }
-    fetchData();
-    return () => {
-      controller.abort();
-    };
-  }, [search]);
   // console.log(favourite);
 
   return (

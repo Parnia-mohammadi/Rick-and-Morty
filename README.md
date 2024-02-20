@@ -1,8 +1,1 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This web application is implemented using Html, CSS and React.js, which uses an API based on a TV series called Rick and Morty. In this app, data is fetched from the server and processed, and in case of loading data or receiving an error, different messages are shown. Also useEffect is used for searching characters based on query strings and fetching a single character which will show in Ui. In addition, Clean up data fetching is used to ensure that everything is in order before the component is unmounted. Also, a Modal component has been created to add or remove favorite characters, and this list is stored in local storage using custom hooks

@@ -7,7 +7,7 @@ function Modal({ children, isOpen, setIsOpen }) {
       <div className="backdrop" onClick={() => setIsOpen(false)}></div>
       <div className="modal">
         <div className="modal__header">
-          <h2 className="title">"modal-test"</h2>
+          <h2 className="title">Favorite Characters :</h2>
           <button className="icon close" onClick={() => setIsOpen(false)}>
             <XCircleIcon />
           </button>

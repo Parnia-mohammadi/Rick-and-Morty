@@ -7,7 +7,7 @@ import NavBar, {
 import CharacterList, {
   Character,
 } from "./components/CharacterList/CharacterList";
-import CharacterDetail from "./components/CharacterDetail";
+import CharacterDetail from "./components/CharacterDetail/CharacterDetail";
 // import { allCharacters } from "../data/data";
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";

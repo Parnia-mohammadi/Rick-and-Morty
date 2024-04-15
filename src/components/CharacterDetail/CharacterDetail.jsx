@@ -2,9 +2,11 @@ import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
 // import { episodes } from "../../data/data";
 import { useEffect, useState } from "react";
 // import { character } from "../../data/data"
-import Loader from "./Loader";
+import Loader from "../Loader";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import style from "./CharacterDetail.module.css";
+
 function CharacterDetail({ selectedId, handleFavourite, isAddedToFavourite }) {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -68,13 +70,13 @@ export function CharacterSubInfo({
   handleFavourite,
 }) {
   return (
-    <div className="character-detail">
+    <div className={style.character_detail}>
       <img
-        className="character-detail__img"
+        className={style.character_detail__img}
         src={selectedCharacter.image}
         alt={selectedCharacter.name}
       />
-      <div className="character-detail__info">
+      <div className={style.character_detail__info}>
         <h3 className="name">
           {selectedCharacter.gender == "Male" ? (
             <span>&#128102;</span>
@@ -92,7 +94,7 @@ export function CharacterSubInfo({
           <span>&nbsp;{selectedCharacter.status}</span>
           <span>&nbsp;- {selectedCharacter.species}</span>
         </div>
-        <div className="location">
+        <div className={style.location}>
           <p>Last known location</p>
           <p>{selectedCharacter.location.name}</p>
         </div>
@@ -117,15 +119,17 @@ export function EpisodeList({ episodes }) {
   const [sortBy, setSortBy] = useState(true);
   let sortedEpisodes;
   if (sortBy) {
-    sortedEpisodes = [...episodes].sort((a, b) => (
-      new Date(a.air_date) - new Date(b.air_date)));
+    sortedEpisodes = [...episodes].sort(
+      (a, b) => new Date(a.air_date) - new Date(b.air_date)
+    );
   } else {
-    sortedEpisodes = [...episodes].sort((a, b) =>(
-      new Date(b.air_date) - new Date(a.air_date)));
+    sortedEpisodes = [...episodes].sort(
+      (a, b) => new Date(b.air_date) - new Date(a.air_date)
+    );
   }
   return (
-    <div className="character-episodes">
-      <div className="title">
+    <div className={style.character_episodes}>
+      <div className={style.title}>
         <h2 className="name">List of episodes:</h2>
         <button
           onClick={() => {
@@ -133,8 +137,8 @@ export function EpisodeList({ episodes }) {
           }}
         >
           <ArrowUpCircleIcon
-            className="icon"
-            style={{ rotate: sortBy ? "0deg" : "180deg" }}
+            className={style.icon}
+            style={{ rotate: sortBy ? "180deg" : "0deg" }}
           />
         </button>
       </div>

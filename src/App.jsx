@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import Modal from "./components/Modal";
+import Modal from "./components/Modal/Modal";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import useCharacters from "./hooks/useCharacters";
 import useLocalStorage from "./hooks/useLocalStorage";

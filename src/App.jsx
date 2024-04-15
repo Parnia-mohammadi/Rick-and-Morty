@@ -1,6 +1,12 @@
 import "./App.css";
-import NavBar, { Search, SearchResult, Faivorites } from "./components/Navbar/NavBar";
-import CharacterList, { Character } from "./components/CharacterList";
+import NavBar, {
+  Search,
+  SearchResult,
+  Faivorites,
+} from "./components/Navbar/NavBar";
+import CharacterList, {
+  Character,
+} from "./components/CharacterList/CharacterList";
 import CharacterDetail from "./components/CharacterDetail";
 // import { allCharacters } from "../data/data";
 import { useEffect, useState } from "react";
@@ -14,10 +20,11 @@ import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
   const [search, setSearch] = useState("");
-  const { isLoading, characters } = useCharacters("https://rickandmortyapi.com/api/character?name",
+  const { isLoading, characters } = useCharacters(
+    "https://rickandmortyapi.com/api/character?name",
     search
   );
-  const [favourite, setFavourite] = useLocalStorage("FAVORITES",[]);
+  const [favourite, setFavourite] = useLocalStorage("FAVORITES", []);
   const [selectedId, setSelectedId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   //delete favorite episodes

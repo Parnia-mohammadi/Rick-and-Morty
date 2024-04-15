@@ -1,5 +1,7 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import Loader from "./Loader";
+import Loader from "../Loader";
+import style from "./CharacterList.module.css";
+
 function CharacterList({
   characters,
   isLoading,
@@ -8,19 +10,16 @@ function CharacterList({
 }) {
   // first way for using loading state
   // if (isLoading) return(
-  //   <div className="characters-list"><Loader/></div>
+  //   <div className="characters_list"><Loader/></div>
   // )
   return (
-    <div className="characters-list">
+    <div className={style.characters_list}>
       {/* second way for using loading state */}
       {isLoading ? (
         <Loader />
       ) : (
         characters.map((item) => (
-          <Character
-            key={item.id}
-            item={item}
-          >
+          <Character key={item.id} item={item}>
             <button
               className="icon red"
               onClick={() => handleSelectedCharacter(item.id)}
@@ -38,7 +37,7 @@ export default CharacterList;
 
 export function Character({ item, children }) {
   return (
-    <div className="list__item">
+    <div className={style.list__item}>
       <img src={item.image} alt={item.name} />
       <h3 className="name">
         {item.gender == "Male" ? (
@@ -48,7 +47,7 @@ export function Character({ item, children }) {
         )}
         <span> {item.name}</span>
       </h3>
-      <div className="list-item__info info">
+      <div className={`${style.list_item__info} info`}>
         <span className={`status ${item.status == "Dead" ? "red" : ""}`}></span>
         <span> {item.status}</span>
         <span> - {item.species}</span>

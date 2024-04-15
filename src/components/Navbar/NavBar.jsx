@@ -1,7 +1,9 @@
 import { HeartIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import style from "./Navbar.module.css";
+
 function NavBar({ children }) {
   return (
-    <nav className="navbar">
+    <nav className={style.navbar}>
       <NavbarLogo />
       {children}
     </nav>
@@ -12,7 +14,7 @@ export default NavBar;
 
 function NavbarLogo() {
   return (
-    <div className="navbar__logo">
+    <div className={style.navbar__logo}>
       <span>Logo </span>
       <SparklesIcon
         style={{ width: "1.5rem", height: "1.5rem", color: "yellow" }}
@@ -24,13 +26,13 @@ function NavbarLogo() {
 export function Faivorites({ favourite, setIsOpen }) {
   return (
     <button
-      className="heart"
+      className={style.heart}
       onClick={() => {
         setIsOpen(true);
       }}
     >
-      <HeartIcon className="icon" />
-      <span className="badge">{favourite.length}</span>
+      <HeartIcon className={style.icon} />
+      <span className={style.badge}>{favourite.length}</span>
     </button>
   );
 }
@@ -47,5 +49,7 @@ export function Search({ search, setSearch }) {
   );
 }
 export function SearchResult({ searchResult }) {
-  return <div className="navbar__result">Found {searchResult} character</div>;
+  return (
+    <div className={style.navbar__result}>Found {searchResult} character</div>
+  );
 }

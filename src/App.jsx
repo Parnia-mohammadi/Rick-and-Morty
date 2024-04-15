@@ -1,5 +1,5 @@
 import "./App.css";
-import NavBar, { Search, SearchResult, Faivorites } from "./components/NavBar";
+import NavBar, { Search, SearchResult, Faivorites } from "./components/Navbar/NavBar";
 import CharacterList, { Character } from "./components/CharacterList";
 import CharacterDetail from "./components/CharacterDetail";
 // import { allCharacters } from "../data/data";
